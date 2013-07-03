@@ -21,5 +21,13 @@ namespace Onion.SolutionTransform.Tests
             var transform = new Transformer(sln);
             Assert.AreEqual(sln, transform.SolutionPath);
         }
+
+        [Test]
+        public void Constructor_should_set_BasePath_if_solution_file_exists()
+        {
+            var sln = TestUtility.GetFixturePath(@"ndriven\NDriven.sln");
+            var transform = new Transformer(sln);
+            Assert.AreEqual(TestUtility.GetFixturePath("ndriven"), transform.BasePath);
+        }
     }
 }
