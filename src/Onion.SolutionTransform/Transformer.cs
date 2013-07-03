@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Onion.SolutionParser.Parser.Model;
 using Parser = Onion.SolutionParser.Parser.SolutionParser;
 
