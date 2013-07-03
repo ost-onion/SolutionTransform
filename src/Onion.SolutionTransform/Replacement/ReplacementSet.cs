@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Onion.SolutionTransform.Replacement
 {
@@ -15,7 +14,7 @@ namespace Onion.SolutionTransform.Replacement
             projects.ToList().ForEach(p =>
                 {
                     var pattern = string.Format("\\b{0}\\b", p.PreviousName);
-                    Add(new NamePattern(pattern, p.Name));
+                    Add(new Pattern(pattern, p.Name));
                 });
         }
     }
