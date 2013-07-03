@@ -7,7 +7,7 @@ namespace Onion.SolutionTransform
 {
     public class Transformer : ITransformer
     {
-        private IEnumerable<Project> _projects; 
+        private ISolution _sln; 
 
         public Transformer(string solutionPath)
         {
@@ -19,10 +19,10 @@ namespace Onion.SolutionTransform
 
         public IEnumerable<Project> GetProjects()
         {
-            if (_projects != null) return _projects;
+            if (_sln != null) return _sln.Projects;
             var sln = Parser.Parse(SolutionPath);
-            _projects = sln.Projects;
-            return _projects;
+            _sln = sln;
+            return _sln.Projects;
         }
 
         public string SolutionPath { get; private set; }
