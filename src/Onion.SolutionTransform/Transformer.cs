@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Onion.SolutionParser.Parser.Model;
 using Parser = Onion.SolutionParser.Parser.SolutionParser;
 
@@ -7,7 +8,8 @@ namespace Onion.SolutionTransform
 {
     public class Transformer : ITransformer
     {
-        private ISolution _sln; 
+        private ISolution _sln;
+        private List<TransformableProject> _projects; 
 
         public Transformer(string solutionPath)
         {
@@ -24,9 +26,13 @@ namespace Onion.SolutionTransform
             return _sln;
         }
 
-        public IEnumerable<Project> GetProjects()
+        public List<TransformableProject> GetProjects()
         {
-            return GetSolution().Projects;
+            if (_projects != null) return _projects;
+            var sprojects = GetSolution().Projects.ToList();
+            _projects = new List<TransformableProject>();
+            sprojects.ForEach(sp => _projects.Add(new TransformableProject(sp)));
+            return _projects;
         }
 
         public string SolutionPath { get; private set; }
