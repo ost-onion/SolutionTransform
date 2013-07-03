@@ -5,7 +5,7 @@ using Parser = Onion.SolutionParser.Parser.SolutionParser;
 
 namespace Onion.SolutionTransform
 {
-    public class Transformer
+    public class Transformer : ITransformer
     {
         private IEnumerable<Project> _projects; 
 
