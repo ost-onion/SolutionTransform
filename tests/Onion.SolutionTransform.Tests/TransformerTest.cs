@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Onion.SolutionTransform.Tests
@@ -40,7 +41,7 @@ namespace Onion.SolutionTransform.Tests
         public void GetProjects_should_parse_solution_and_fetch_projects_and_cache_result()
         {
             var projects = _transformer.GetProjects();
-            Assert.True(projects.Count > 0);
+            Assert.True(projects.Any());
             Assert.AreSame(projects, _transformer.GetProjects());
         }
     }
