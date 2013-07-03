@@ -23,7 +23,7 @@ namespace Onion.SolutionTransform.IO
                     WalkDirectory(d, pattern, ref accum);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //ignore exceptions
             }
