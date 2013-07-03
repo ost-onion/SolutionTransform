@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Onion.SolutionParser.Parser.Model;
 
 namespace Onion.SolutionTransform.Tests
 {
@@ -35,6 +36,14 @@ namespace Onion.SolutionTransform.Tests
         public void Constructor_should_set_BasePath_if_solution_file_exists()
         {
             Assert.AreEqual(TestUtility.GetFixturePath("ndriven"), _transformer.BasePath);
+        }
+
+        [Test]
+        public void GetSolution_should_parse_solution_and_cache_result()
+        {
+            var sln = _transformer.GetSolution();
+            Assert.IsInstanceOf<ISolution>(sln);
+            Assert.AreSame(sln, _transformer.GetSolution());
         }
 
         [Test]

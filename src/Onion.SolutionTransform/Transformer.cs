@@ -17,12 +17,16 @@ namespace Onion.SolutionTransform
             BasePath = new FileInfo(SolutionPath).DirectoryName;
         }
 
+        public ISolution GetSolution()
+        {
+            if (_sln != null) return _sln;
+            _sln = Parser.Parse(SolutionPath);
+            return _sln;
+        }
+
         public IEnumerable<Project> GetProjects()
         {
-            if (_sln != null) return _sln.Projects;
-            var sln = Parser.Parse(SolutionPath);
-            _sln = sln;
-            return _sln.Projects;
+            return GetSolution().Projects;
         }
 
         public string SolutionPath { get; private set; }
