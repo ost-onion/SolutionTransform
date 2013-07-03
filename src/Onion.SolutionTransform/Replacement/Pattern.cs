@@ -10,6 +10,11 @@ namespace Onion.SolutionTransform.Replacement
             Replace = replace;
         }
 
+        public string ReplaceInString(string str)
+        {
+            return Search.Replace(str, Replace);
+        }
+
         public Regex Search { get; private set; }
         public string Replace { get; set; }
     }
