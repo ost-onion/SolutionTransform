@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="IO\DirectoryWalker.cs" />
     <Compile Include="ITransformer.cs" />
+    <Compile Include="Replacement\Pattern.cs" />
+    <Compile Include="Replacement\ReplacementSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransformableProject.cs" />
     <Compile Include="Transformer.cs" />
