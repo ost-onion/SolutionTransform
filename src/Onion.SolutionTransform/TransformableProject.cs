@@ -10,7 +10,8 @@ namespace Onion.SolutionTransform
         public TransformableProject(Project proj)
         {
             _solutionProject = proj;
-            IsModified = false;
+            NameIsModified = false;
+            PathIsModified = false;
         }
 
         public string Name
@@ -19,7 +20,7 @@ namespace Onion.SolutionTransform
             set
             {
                 _solutionProject.Name = value;
-                IsModified = true;
+                NameIsModified = true;
             }
         }
 
@@ -29,7 +30,7 @@ namespace Onion.SolutionTransform
             set
             {
                 _solutionProject.Path = value;
-                IsModified = true;
+                PathIsModified = true;
             }
         }
 
@@ -43,6 +44,7 @@ namespace Onion.SolutionTransform
             get { return _solutionProject.Guid; }
         }
 
-        public bool IsModified { get; private set; }
+        public bool NameIsModified { get; private set; }
+        public bool PathIsModified { get; private set; }
     }
 }

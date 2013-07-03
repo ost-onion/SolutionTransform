@@ -19,9 +19,10 @@ namespace Onion.SolutionTransform.Tests
         }
 
         [Test]
-        public void IsModified_should_default_to_false()
+        public void NameIsModified_and_PathIsModified_should_default_to_false()
         {
-            Assert.False(_project.IsModified);
+            Assert.False(_project.NameIsModified);
+            Assert.False(_project.PathIsModified);
         }
 
         [Test]
@@ -31,11 +32,11 @@ namespace Onion.SolutionTransform.Tests
         }
 
         [Test]
-        public void Name_setter_should_set_underlying_and_set_IsModified_property()
+        public void Name_setter_should_set_underlying_and_set_NameIsModified_property()
         {
             _project.Name = "NewProject";
             Assert.AreEqual("NewProject", _project.Name);
-            Assert.True(_project.IsModified);
+            Assert.True(_project.NameIsModified);
         }
 
         [Test]
@@ -45,10 +46,11 @@ namespace Onion.SolutionTransform.Tests
         }
 
         [Test]
-        public void Path_setter_should_set_underlying_and_set_IsModified_property()
+        public void Path_setter_should_set_underlying_and_set_PathIsModified_property()
         {
             _project.Path = "src/different/path";
             Assert.AreEqual("src/different/path", _project.Path);
+            Assert.True(_project.PathIsModified);
         }
 
         [Test]
