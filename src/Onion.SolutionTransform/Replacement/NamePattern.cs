@@ -2,9 +2,9 @@
 
 namespace Onion.SolutionTransform.Replacement
 {
-    public class Pattern
+    public class NamePattern : IPattern
     {
-        public Pattern(string pattern, string replace)
+        public NamePattern(string pattern, string replace)
         {
             Search = new Regex(pattern, RegexOptions.Compiled);
             Replace = replace;
