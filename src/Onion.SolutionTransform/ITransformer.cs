@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Onion.SolutionParser.Parser.Model;
+﻿using Onion.SolutionTransform.Parser;
 
 namespace Onion.SolutionTransform
 {
     public interface ITransformer
     {
-        
+        IParserInfo ParserInfo { get; }
     }
 }
