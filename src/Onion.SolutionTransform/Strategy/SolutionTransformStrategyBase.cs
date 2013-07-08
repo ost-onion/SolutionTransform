@@ -18,5 +18,7 @@ namespace Onion.SolutionTransform.Strategy
             var transformableProjects = modified as List<TransformableProject> ?? modified.ToList();
             return transformableProjects;
         }
+
+        protected abstract List<string> GetFiles();
     }
 }
