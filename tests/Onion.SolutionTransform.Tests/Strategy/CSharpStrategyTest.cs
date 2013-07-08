@@ -28,8 +28,12 @@ namespace Onion.SolutionTransform.Tests.Strategy
             var expectedIEntity = TestUtility.GetFileContents("RenamedNamespace.txt");
             var authServiceSrc = TestUtility.GetFileContents(@"ndriven\src\Presentation.Web\Services\AuthenticationService.cs");
             var expectedAuthService = TestUtility.GetFileContents("RenamedUsing.txt");
+            var nHibernateRepoSrc = TestUtility.GetFileContents(@"ndriven\src\Infrastructure.NHibernate\Repositories\NHibernateRepository.cs");
+            var expectedNhib = TestUtility.GetFileContents("RenamedFullyQualified.txt");
+
             Assert.AreEqual(expectedIEntity, iEntitySrc);
             Assert.AreEqual(expectedAuthService, authServiceSrc);
+            Assert.AreEqual(expectedNhib, nHibernateRepoSrc);
         }
     }
 }

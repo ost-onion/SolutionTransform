@@ -43,8 +43,10 @@ namespace Onion.SolutionTransform.Strategy
                 {
                     var usng = string.Format("using[\\s]+{0}", p.PreviousName);
                     var nspace = string.Format("namespace[\\s]+{0}", p.PreviousName);
+                    var qualified = string.Format("\\b{0}\\.", p.PreviousName);
                     patterns.Add(new Pattern(usng, string.Format("using {0}", p.Name)));
                     patterns.Add(new Pattern(nspace, string.Format("namespace {0}", p.Name)));
+                    patterns.Add(new Pattern(qualified, string.Format("{0}.", p.Name)));
                 });
             return patterns;
         }
