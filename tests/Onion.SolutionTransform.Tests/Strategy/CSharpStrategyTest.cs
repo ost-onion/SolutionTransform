@@ -20,7 +20,7 @@ namespace Onion.SolutionTransform.Tests.Strategy
         }
 
         [Test]
-        public async void Transform_should_change_using_and_namespace_statements()
+        public async void TransformAsync_should_change_using_and_namespace_statements()
         {
             _info.GetProjects().First(p => p.Name == "Core").Name = "AppleCore";
             await _strategy.TransformAsync();

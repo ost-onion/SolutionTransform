@@ -1,63 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Onion.SolutionTransform.IO;
-using Onion.SolutionTransform.Parser;
 using Onion.SolutionTransform.Replacement;
 
 namespace Onion.SolutionTransform.Strategy
 {
-    public class CSharpStrategy : ISolutionTransformStrategy
+    public class CSharpStrategy : SolutionTransformStrategyBase
     {
-        public async Task TransformAsync()
+        public override async Task TransformAsync()
         {
-            var transformableProjects = TransformableProjects(p => p.NameIsModified);
-            if (!transformableProjects.Any()) new CancellationTokenSource().Cancel();
-            var patterns = GetPatternSet(transformableProjects);
-            var files = DirectoryWalker.GetFiles(ParserInfo.BasePath, "*.cs");
-            files.AddRange(DirectoryWalker.GetFiles(ParserInfo.BasePath, "*.cshtml"));
-            await DoTransformAsync(files, patterns);
+            await DoTransformAsync(GetFiles(), GetPatternSet());
         }
 
-        private static async Task DoTransformAsync(List<string> files, IEnumerable<IPattern> patterns)
+        public override void Transform()
         {
-            await Task.Run(() => files.ForEach(f =>
+            var patterns = GetPatternSet();
+            var enumerable = patterns as IPattern[] ?? patterns.ToArray();
+            if (!enumerable.Any()) return;
+            Transform(GetFiles(), enumerable);
+        }
+
+        protected void Transform(List<string> files, IEnumerable<IPattern> patterns)
+        {
+            files.ForEach(f =>
+            {
+                string contents;
+                using (var reader = new StreamReader(f))
                 {
-                    string contents;
-                    using (var reader = new StreamReader(f))
-                    {
-                        contents = reader.ReadToEnd();
-                    }
-                    contents = patterns.Aggregate(contents, (current, pattern) => pattern.ReplaceInString(current));
-                    File.WriteAllText(f, contents);
-                }));
+                    contents = reader.ReadToEnd();
+                }
+                contents = patterns.Aggregate(contents, (current, pattern) => pattern.ReplaceInString(current));
+                File.WriteAllText(f, contents);
+            });
         }
 
-        private static IEnumerable<IPattern> GetPatternSet(List<TransformableProject> transformableProjects)
+        private IEnumerable<IPattern> GetPatternSet()
         {
             var patterns = new HashSet<IPattern>();
-            transformableProjects.ForEach(p =>
-                {
-                    var usng = string.Format("using[\\s]+{0}", p.PreviousName);
-                    var nspace = string.Format("namespace[\\s]+{0}", p.PreviousName);
-                    var qualified = string.Format("\\b{0}\\.", p.PreviousName);
-                    patterns.Add(new Pattern(usng, string.Format("using {0}", p.Name)));
-                    patterns.Add(new Pattern(nspace, string.Format("namespace {0}", p.Name)));
-                    patterns.Add(new Pattern(qualified, string.Format("{0}.", p.Name)));
-                });
+            var transformableProjects = TransformableProjects(p => p.NameIsModified);
+            if (!transformableProjects.Any()) return patterns;
+            transformableProjects.ForEach(p => AddProjectPatterns(p, patterns));
             return patterns;
         }
 
-        protected List<TransformableProject> TransformableProjects(Func<TransformableProject, bool> predicate)
+        private List<string> GetFiles()
         {
-            var modified = ParserInfo.GetProjects().Where(predicate);
-            var transformableProjects = modified as List<TransformableProject> ?? modified.ToList();
-            return transformableProjects;
+            var files = DirectoryWalker.GetFiles(ParserInfo.BasePath, "*.cs");
+            files.AddRange(DirectoryWalker.GetFiles(ParserInfo.BasePath, "*.cshtml"));
+            return files;
         }
 
-        public IParserInfo ParserInfo { get; set; }
+        private async Task DoTransformAsync(List<string> files, IEnumerable<IPattern> patterns)
+        {
+            var enumerable = patterns as IPattern[] ?? patterns.ToArray();
+            if (!enumerable.Any()) new CancellationTokenSource().Cancel();
+            await Task.Run(() => Transform(files, enumerable));
+        }
+
+        private void AddProjectPatterns(TransformableProject p, ISet<IPattern> patterns)
+        {
+            var usng = string.Format("using[\\s]+{0}", p.PreviousName);
+            var nspace = string.Format("namespace[\\s]+{0}", p.PreviousName);
+            var qualified = string.Format("\\b{0}\\.", p.PreviousName);
+            patterns.Add(new Pattern(usng, string.Format("using {0}", p.Name)));
+            patterns.Add(new Pattern(nspace, string.Format("namespace {0}", p.Name)));
+            patterns.Add(new Pattern(qualified, string.Format("{0}.", p.Name)));
+        }
     }
 }
