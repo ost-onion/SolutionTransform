@@ -10,5 +10,14 @@ namespace Onion.SolutionTransform.Tests
             var realName = fileName.Replace('\\', Path.DirectorySeparatorChar);
             return fixturesPath + Path.DirectorySeparatorChar + realName;
         }
+
+        public static string GetFileContents(string fileName)
+        {
+            var path = GetFixturePath(fileName);
+            using (var reader = new StreamReader(path))
+            {
+                return reader.ReadToEnd();
+            }
+        }
     }
 }
