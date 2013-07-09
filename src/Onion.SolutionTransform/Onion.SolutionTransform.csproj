@@ -47,6 +47,7 @@
     <Compile Include="Parser\IParserInfo.cs" />
     <Compile Include="Parser\ParserInfo.cs" />
     <Compile Include="Project\ProjectDocument.cs" />
+    <Compile Include="Project\ProjectReference.cs" />
     <Compile Include="Replacement\IPattern.cs" />
     <Compile Include="Replacement\Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
