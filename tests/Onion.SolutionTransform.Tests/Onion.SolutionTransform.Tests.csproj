@@ -120,10 +120,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /e  "$(SolutionDir)fixtures" "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures"</PostBuildEvent>
+    <PostBuildEvent>IF EXIST  "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven" RD /S /Q "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven"
+xcopy /e  "$(SolutionDir)fixtures" "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>IF EXIST  "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven" RD /S /Q "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven"
+    <PreBuildEvent>
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
