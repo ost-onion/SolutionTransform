@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Onion.SolutionTransform.Project;
 
@@ -16,13 +17,29 @@ namespace Onion.SolutionTransform.Strategy
         public override void Transform()
         {
             var projects = TransformableProjects(p => p.NameIsModified);
+            TransformProjectFileContents(projects);
+            TransformProjectPaths(projects);
+        }
+
+        private void TransformProjectPaths(List<TransformableProject> projects)
+        {
+            projects.ForEach(p =>
+                {
+                    var info = new FileInfo(ParserInfo.BasePath + Path.DirectorySeparatorChar + p.Path);
+                    var directory = info.Directory;
+                    File.Move(info.FullName, directory.FullName + Path.DirectorySeparatorChar + p.Name + info.Extension);
+                    Directory.Move(directory.FullName, directory.FullName.Replace(p.PreviousName, p.Name));
+                });
+        }
+
+        private void TransformProjectFileContents(List<TransformableProject> projects)
+        {
             projects.ForEach(p =>
                 {
                     var doc = new ProjectDocument(p, ParserInfo) {RootNamespace = p.Name, AssemblyName = p.Name};
                     WriteProjectReferences(p);
                     doc.Write();
                 });
-
         }
 
         private void WriteProjectReferences(TransformableProject p)

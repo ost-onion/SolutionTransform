@@ -21,11 +21,11 @@ namespace Onion.SolutionTransform.Tests.Strategy
         }
 
         [Test]
-        public void Transform_should_change_AssemblyName_and_RootNamespace_nodes()
+        public void Transform_should_change_AssemblyName_and_RootNamespace_nodes_and_directory_name()
         {
             _info.GetProjects().First(p => p.Name == "Infrastructure.IoC").Name = "Inf.DI";
             _strategy.Transform();
-            var projectSrc = TestUtility.GetFixturePath(@"ndriven\src\Infrastructure.IoC\Infrastructure.IoC.csproj");
+            var projectSrc = TestUtility.GetFixturePath(@"ndriven\src\Inf.DI\Inf.DI.csproj");
             var expectedProjectXml = TestUtility.GetFixturePath("RenamedProjectFileContents.xml");
             var projectDoc = XDocument.Load(projectSrc);
             var expectedDoc = XDocument.Load(expectedProjectXml);
