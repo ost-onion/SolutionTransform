@@ -34,7 +34,6 @@ namespace Onion.SolutionTransform.Tests.Strategy
         }
 
         [Test]
-        [Ignore("Ignored during project refactoring")]
         public void Transform_should_update_project_references_in_other_projects()
         {
             var projectSrc = TestUtility.GetFixturePath(@"ndriven\src\Presentation.Web\Presentation.Web.csproj");

@@ -17,7 +17,7 @@ namespace Onion.SolutionTransform.Project
         public ProjectDocument(TransformableProject proj, IParserInfo info)
         {
             _project = proj;
-            _path = info.BasePath + Path.DirectorySeparatorChar + proj.Path;
+            _path = GetDocumentPath(proj, info);
             _doc = XDocument.Load(_path);
         }
 
@@ -61,6 +61,17 @@ namespace Onion.SolutionTransform.Project
                    yield return new ProjectReference(xElement);
                 }
             }
-        } 
+        }
+ 
+        public static ProjectDocument Load(TransformableProject proj, IParserInfo info)
+        {
+            var path = GetDocumentPath(proj, info);
+            return !File.Exists(path) ? null : new ProjectDocument(proj, info);
+        }
+
+        private static string GetDocumentPath(TransformableProject proj, IParserInfo info)
+        {
+            return info.BasePath + Path.DirectorySeparatorChar + proj.Path;
+        }
     }
 }

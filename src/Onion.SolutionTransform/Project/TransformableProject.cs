@@ -6,6 +6,7 @@ namespace Onion.SolutionTransform.Project
     public class TransformableProject
     {
         private readonly ParserProject _solutionProject;
+        private static readonly Guid SolutionFolderType = new Guid("2150E333-8FDC-42A3-9474-1A3956D46DE8");
 
         public TransformableProject(ParserProject proj)
         {
@@ -46,6 +47,11 @@ namespace Onion.SolutionTransform.Project
         public Guid Guid
         {
             get { return _solutionProject.Guid; }
+        }
+
+        public bool IsSolutionFolder
+        {
+            get { return TypeGuid == SolutionFolderType; }
         }
 
         public string PreviousName { get; private set; }
