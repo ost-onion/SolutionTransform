@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Onion.SolutionTransform.Parser;
 
 namespace Onion.SolutionTransform.Strategy
@@ -9,7 +8,6 @@ namespace Onion.SolutionTransform.Strategy
     abstract public class SolutionTransformStrategyBase : ISolutionTransformStrategy
     {
         public abstract void Transform();
-        public abstract Task TransformAsync();
         public IParserInfo ParserInfo { get; set; }
 
         protected List<TransformableProject> TransformableProjects(Func<TransformableProject, bool> predicate)
@@ -18,7 +16,5 @@ namespace Onion.SolutionTransform.Strategy
             var transformableProjects = modified as List<TransformableProject> ?? modified.ToList();
             return transformableProjects;
         }
-
-        protected abstract List<string> GetFiles();
     }
 }

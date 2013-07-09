@@ -20,10 +20,10 @@ namespace Onion.SolutionTransform.Tests.Strategy
         }
 
         [Test]
-        public async void TransformAsync_should_change_using_and_namespace_statements()
+        public void Transform_should_change_using_and_namespace_statements()
         {
             _info.GetProjects().First(p => p.Name == "Core").Name = "AppleCore";
-            await _strategy.TransformAsync();
+            _strategy.Transform();
             var iEntitySrc = TestUtility.GetFileContents(@"ndriven\src\Core\Domain\Model\IEntity.cs");
             var expectedIEntity = TestUtility.GetFileContents("RenamedNamespace.txt");
             var authServiceSrc = TestUtility.GetFileContents(@"ndriven\src\Presentation.Web\Services\AuthenticationService.cs");

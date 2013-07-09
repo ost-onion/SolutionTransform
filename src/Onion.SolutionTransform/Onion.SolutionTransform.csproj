@@ -52,6 +52,7 @@
     <Compile Include="Strategy\CSharpStrategy.cs" />
     <Compile Include="Strategy\ISolutionTransformStrategy.cs" />
     <Compile Include="Strategy\PatternBasedStrategy.cs" />
+    <Compile Include="Strategy\ProjectStrategy.cs" />
     <Compile Include="Strategy\SolutionTransformStrategyBase.cs" />
     <Compile Include="TransformableProject.cs" />
     <Compile Include="Transformer.cs" />
