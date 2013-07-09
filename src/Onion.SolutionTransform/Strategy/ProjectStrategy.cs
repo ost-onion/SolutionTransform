@@ -1,31 +1,51 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using Onion.SolutionTransform.Project;
 
 namespace Onion.SolutionTransform.Strategy
 {
     public class ProjectStrategy : SolutionTransformStrategyBase
     {
+        private List<TransformableProject> _documentedProjects;
+
+        public ProjectStrategy()
+        {
+            _documentedProjects = new List<TransformableProject>();
+        }
+
         public override void Transform()
         {
             var projects = TransformableProjects(p => p.NameIsModified);
             projects.ForEach(p =>
                 {
                     var doc = new ProjectDocument(p, ParserInfo) {RootNamespace = p.Name, AssemblyName = p.Name};
-                    var all = TransformableProjects(tp => !tp.IsSolutionFolder);
-                    all.ForEach(t =>
-                        {
-                            var d = new ProjectDocument(t, ParserInfo);
-                            var pref = d.ProjectReferences.FirstOrDefault(pr => pr.Project.Equals(p.Guid));
-                            if (pref == null) return;
-                            pref.Include = pref.Include.Replace(p.PreviousName, p.Name);
-                            pref.Name = p.Name;
-                            d.Write();
-                        });
+                    WriteProjectReferences(p);
                     doc.Write();
                 });
 
+        }
+
+        private void WriteProjectReferences(TransformableProject p)
+        {
+            DocumentedProjects.ForEach(t =>
+                {
+                    var doc = new ProjectDocument(t, ParserInfo);
+                    var reference = doc.ProjectReferences.FirstOrDefault(pr => pr.Project.Equals(p.Guid));
+                    if (reference == null) return;
+                    reference.Include = reference.Include.Replace(p.PreviousName, p.Name);
+                    reference.Name = p.Name;
+                    doc.Write();
+                });
+        }
+
+        private List<TransformableProject> DocumentedProjects
+        {
+            get
+            {
+                if (_documentedProjects.Any()) return _documentedProjects;
+                _documentedProjects = TransformableProjects(tp => !tp.IsSolutionFolder);
+                return _documentedProjects;
+            }
         }
     }
 }
