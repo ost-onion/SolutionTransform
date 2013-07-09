@@ -1,13 +1,13 @@
 ﻿using System;
-using Onion.SolutionParser.Parser.Model;
+using ParserProject = Onion.SolutionParser.Parser.Model.Project;
 
-namespace Onion.SolutionTransform
+namespace Onion.SolutionTransform.Project
 {
     public class TransformableProject
     {
-        private readonly Project _solutionProject;
+        private readonly ParserProject _solutionProject;
 
-        public TransformableProject(Project proj)
+        public TransformableProject(ParserProject proj)
         {
             _solutionProject = proj;
             NameIsModified = false;

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Onion.SolutionParser.Parser.Model;
+using Onion.SolutionTransform.Project;
 using OnionParser = Onion.SolutionParser.Parser.SolutionParser;
 
 namespace Onion.SolutionTransform.Parser

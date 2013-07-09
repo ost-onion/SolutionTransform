@@ -32,5 +32,16 @@ namespace Onion.SolutionTransform.Tests.Strategy
 
             Assert.True(XNode.DeepEquals(expectedDoc, projectDoc));
         }
+
+        [Test]
+        [Ignore("Ignored during project refactoring")]
+        public void Transform_should_update_project_references_in_other_projects()
+        {
+            var projectSrc = TestUtility.GetFixturePath(@"ndriven\src\Presentation.Web\Presentation.Web.csproj");
+            var expectedProjectXml = TestUtility.GetFixturePath("RenamedProjectReferences.xml");
+            var projectDoc = XDocument.Load(projectSrc);
+            var expectedDoc = XDocument.Load(expectedProjectXml);
+            Assert.True(XNode.DeepEquals(expectedDoc, projectDoc));
+        }
     }
 }

@@ -67,7 +67,7 @@
     <Compile Include="Strategy\CSharpStrategyTest.cs" />
     <Compile Include="Strategy\ProjectStrategyTest.cs" />
     <Compile Include="TestUtility.cs" />
-    <Compile Include="TransformableProjectTest.cs" />
+    <Compile Include="Project\TransformableProjectTest.cs" />
     <Compile Include="TransformerTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +113,9 @@
     <Content Include="Fixtures\RenamedProjectFileContents.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Fixtures\RenamedProjectReferences.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

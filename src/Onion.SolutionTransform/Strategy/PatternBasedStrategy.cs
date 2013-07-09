@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Onion.SolutionTransform.Project;
 using Onion.SolutionTransform.Replacement;
 
 namespace Onion.SolutionTransform.Strategy

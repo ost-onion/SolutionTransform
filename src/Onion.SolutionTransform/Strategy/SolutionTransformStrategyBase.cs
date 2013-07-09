@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Onion.SolutionTransform.Parser;
+using Onion.SolutionTransform.Project;
 
 namespace Onion.SolutionTransform.Strategy
 {

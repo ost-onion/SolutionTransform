@@ -1,19 +1,20 @@
 ﻿using System;
 using NUnit.Framework;
-using Onion.SolutionParser.Parser.Model;
+using Onion.SolutionTransform.Project;
+using ParserProject = Onion.SolutionParser.Parser.Model.Project;
 
-namespace Onion.SolutionTransform.Tests
+namespace Onion.SolutionTransform.Tests.Project
 {
     [TestFixture]
     public class TransformableProjectTest
     {
-        private Project _solutionProject;
+        private ParserProject _solutionProject;
         private TransformableProject _project;
 
         [SetUp]
         public void SetUp()
         {
-            _solutionProject = new Project(Guid.NewGuid(), "TestProject", "src/TestProject/TestProject.csproj",
+            _solutionProject = new ParserProject(Guid.NewGuid(), "TestProject", "src/TestProject/TestProject.csproj",
                                        Guid.NewGuid());
             _project = new TransformableProject(_solutionProject);
         }

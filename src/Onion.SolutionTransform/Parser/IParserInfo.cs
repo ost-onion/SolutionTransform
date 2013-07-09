@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Onion.SolutionParser.Parser.Model;
+using Onion.SolutionTransform.Project;
 
 namespace Onion.SolutionTransform.Parser
 {

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using Onion.SolutionTransform.IO;
 
 namespace Onion.SolutionTransform.Strategy
 {
@@ -18,9 +15,17 @@ namespace Onion.SolutionTransform.Strategy
                 {
                     var path = ParserInfo.BasePath + Path.DirectorySeparatorChar + p.Path;
                     var doc = XDocument.Load(path);
-                    var initialPropertyGroup = doc.Element(XmlNs + "Project").Elements(XmlNs + "PropertyGroup").First();
+                    var project = doc.Element(XmlNs + "Project");
+
+                    //update root namespace and assembly name
+                    var initialPropertyGroup = project.Elements(XmlNs + "PropertyGroup").First();
                     initialPropertyGroup.Element(XmlNs + "RootNamespace").SetValue(p.Name);
                     initialPropertyGroup.Element(XmlNs + "AssemblyName").SetValue(p.Name);
+
+                    //update project references
+                    //var all = ParserInfo.GetProjects();
+
+
                     File.WriteAllText(path, doc.ToString());
                 });
 

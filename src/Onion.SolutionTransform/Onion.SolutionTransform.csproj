@@ -54,7 +54,7 @@
     <Compile Include="Strategy\PatternBasedStrategy.cs" />
     <Compile Include="Strategy\ProjectStrategy.cs" />
     <Compile Include="Strategy\SolutionTransformStrategyBase.cs" />
-    <Compile Include="TransformableProject.cs" />
+    <Compile Include="Project\TransformableProject.cs" />
     <Compile Include="Transformer.cs" />
   </ItemGroup>
   <ItemGroup>
