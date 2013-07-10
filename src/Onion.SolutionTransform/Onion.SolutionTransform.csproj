@@ -61,7 +61,7 @@
     <Compile Include="Strategy\ProjectStrategy.cs" />
     <Compile Include="Strategy\SolutionTransformStrategyBase.cs" />
     <Compile Include="Project\TransformableProject.cs" />
-    <Compile Include="Template\ITemplate.cs" />
+    <Compile Include="Template\ISolutionTransformTemplate.cs" />
     <Compile Include="Transformer.cs" />
   </ItemGroup>
   <ItemGroup>

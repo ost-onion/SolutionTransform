@@ -19,7 +19,7 @@ namespace Onion.SolutionTransform
             return this;
         }
 
-        public ITransformer AddTemplate(ITemplate template)
+        public ITransformer AddTemplate(ISolutionTransformTemplate template)
         {
             foreach (var strat in template.GetStrategies())
             {

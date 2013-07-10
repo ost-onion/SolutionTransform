@@ -43,7 +43,7 @@ namespace Onion.SolutionTransform.Tests
         }
     }
 
-    public class TestTemplate : ITemplate
+    public class TestTemplate : ISolutionTransformTemplate
     {
         public IEnumerable<ISolutionTransformStrategy> GetStrategies()
         {

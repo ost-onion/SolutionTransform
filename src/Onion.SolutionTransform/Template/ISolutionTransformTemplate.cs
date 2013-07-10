@@ -3,7 +3,7 @@ using Onion.SolutionTransform.Strategy;
 
 namespace Onion.SolutionTransform.Template
 {
-    public interface ITemplate
+    public interface ISolutionTransformTemplate
     {
         IEnumerable<ISolutionTransformStrategy> GetStrategies();
     }

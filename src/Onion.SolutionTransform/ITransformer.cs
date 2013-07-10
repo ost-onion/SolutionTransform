@@ -8,7 +8,7 @@ namespace Onion.SolutionTransform
     public interface ITransformer
     {
         ITransformer AddStrategy(ISolutionTransformStrategy strat);
-        ITransformer AddTemplate(ITemplate template);
+        ITransformer AddTemplate(ISolutionTransformTemplate template);
         IParserInfo ParserInfo { get; }
         Queue<ISolutionTransformStrategy> Strategies { get; }  
     }
