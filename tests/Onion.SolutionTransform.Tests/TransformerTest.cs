@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Onion.SolutionTransform.Parser;
@@ -15,7 +16,7 @@ namespace Onion.SolutionTransform.Tests
         [SetUp]
         public void SetUp()
         {
-            var slnPath = TestUtility.GetFixturePath(@"ndriven\NDriven.sln");
+            var slnPath = TestUtility.GetFixturePath(@"transform\ndriven\NDriven.sln");
             _transformer = new Transformer(slnPath);
         }
 
@@ -35,11 +36,44 @@ namespace Onion.SolutionTransform.Tests
         }
 
         [Test]
+        public void AddStrategy_should_set_ParserInfo_if_null()
+        {
+            var strat = new CSharpStrategy();
+            _transformer.AddStrategy(strat);
+            Assert.AreSame(_transformer.ParserInfo, strat.ParserInfo);
+        }
+
+        [Test]
+        public void AddStrategy_should_not_set_ParserInfo_if_already_set()
+        {
+            var strat = new CSharpStrategy();
+            var info = new Mock<IParserInfo>();
+            strat.ParserInfo = info.Object;
+
+            _transformer.AddStrategy(strat);
+            Assert.AreNotSame(_transformer.ParserInfo, strat.ParserInfo);
+        }
+
+        [Test]
         public void AddTemplate_should_add_any_strategies_included_and_return_self()
         {
             var self = _transformer.AddTemplate(new TestTemplate());
             Assert.AreSame(_transformer, self);
             Assert.AreEqual(2, _transformer.Strategies.Count);
+        }
+
+        [Test]
+        public void Transform_should_result_in_transformed_solution()
+        {
+            _transformer
+                .AddStrategy(new CSharpStrategy())
+                .AddStrategy(new ProjectStrategy());
+
+            var projects = _transformer.ParserInfo.GetProjects();
+            var clientName = "SuperClient.";
+            projects.Where(p => p.Name != ".nuget").ToList().ForEach(p => p.Name = clientName + p.Name);
+
+            _transformer.Transform();
         }
     }
 

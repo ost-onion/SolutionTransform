@@ -16,7 +16,7 @@ namespace Onion.SolutionTransform.Strategy
 
         public override void Transform()
         {
-            var projects = TransformableProjects(p => p.NameIsModified);
+            var projects = TransformableProjects(p => p.NameIsModified && !p.IsSolutionFolder);
             TransformProjectFileContents(projects);
             TransformProjectPaths(projects);
         }
