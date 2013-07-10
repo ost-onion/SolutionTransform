@@ -10,7 +10,7 @@ namespace Onion.SolutionTransform.Tests.IO
         public void GetFiles_should_return_all_files_in_a_directory()
         {
             var files = DirectoryWalker.GetFiles(TestUtility.GetFixturePath("ndriven"));
-            Assert.AreEqual(141, files.Count);
+            Assert.AreEqual(128, files.Count);
         }
 
         [Test]
