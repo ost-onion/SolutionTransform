@@ -6,7 +6,7 @@ namespace Onion.SolutionTransform.Solution
 {
     public class SolutionAssembler
     {
-        private IParserInfo _info;
+        private readonly IParserInfo _info;
 
         public SolutionAssembler(IParserInfo info)
         {
@@ -16,30 +16,9 @@ namespace Onion.SolutionTransform.Solution
         public string GetAssembledSolution(string formatVersion, string visualStudioVersion)
         {
             var header = GetSolutionHeader(formatVersion, visualStudioVersion);
-            var solution = _info.GetSolution();
-            var projects = _info.GetProjects();
             var builder = new StringBuilder(header);
-            foreach (var project in projects)
-            {
-                builder.AppendFormat("Project(\"{0}\") = \"{1}\", \"{2}\", \"{3}\"" + Environment.NewLine,
-                                     '{' + project.TypeGuid.ToString().ToUpperInvariant() + '}',
-                                     project.Name,
-                                     !string.IsNullOrEmpty(project.PreviousName) ? project.Path.Replace(project.PreviousName, project.Name) : project.Path,
-                                     '{' + project.Guid.ToString().ToUpperInvariant() + '}');
-                if (project.ProjectSection != null)
-                {
-                    builder.AppendFormat("\tProjectSection({0}) = {1}" + Environment.NewLine,
-                                         project.ProjectSection.Name,
-                                         char.ToLowerInvariant(project.ProjectSection.Type.ToString()[0]) +
-                                         project.ProjectSection.Type.ToString().Substring(1));
-                    foreach (var entry in project.ProjectSection.Entries)
-                    {
-                        builder.AppendFormat("\t\t{0} = {1}" + Environment.NewLine, entry.Key, entry.Value);
-                    }
-                    builder.Append("\tEndProjectSection" + Environment.NewLine);
-                }
-                builder.Append("EndProject" + Environment.NewLine);
-            }
+            ProjectAssembler.Assemble(builder, _info);
+            var solution = _info.GetSolution();
             builder.Append("Global" + Environment.NewLine);
             foreach (var section in solution.Global)
             {
