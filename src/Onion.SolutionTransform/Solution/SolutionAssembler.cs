@@ -18,21 +18,7 @@ namespace Onion.SolutionTransform.Solution
             var header = GetSolutionHeader(formatVersion, visualStudioVersion);
             var builder = new StringBuilder(header);
             ProjectAssembler.Assemble(builder, _info);
-            var solution = _info.GetSolution();
-            builder.Append("Global" + Environment.NewLine);
-            foreach (var section in solution.Global)
-            {
-                builder.AppendFormat("\tGlobalSection({0}) = {1}" + Environment.NewLine,
-                                     section.Name,
-                                     char.ToLowerInvariant(section.Type.ToString()[0]) +
-                                     section.Type.ToString().Substring(1));
-                foreach (var entry in section.Entries)
-                {
-                    builder.AppendFormat("\t\t{0} = {1}" + Environment.NewLine, entry.Key, entry.Value);
-                }
-                builder.Append("\tEndGlobalSection" + Environment.NewLine);
-            }
-            builder.Append("EndGlobal" + Environment.NewLine);
+            GlobalAssembler.Assemble(builder, _info);
             return builder.ToString();
         }
 
