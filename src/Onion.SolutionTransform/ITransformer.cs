@@ -7,6 +7,7 @@ namespace Onion.SolutionTransform
 {
     public interface ITransformer
     {
+        void Transform(string formatVersion, string visualStudioVersion);
         ITransformer AddStrategy(ISolutionTransformStrategy strat);
         ITransformer AddTemplate(ISolutionTransformTemplate template);
         IParserInfo ParserInfo { get; }
