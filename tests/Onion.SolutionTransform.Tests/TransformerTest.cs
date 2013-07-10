@@ -1,7 +1,9 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 using Onion.SolutionTransform.Parser;
 using Onion.SolutionTransform.Strategy;
+using Onion.SolutionTransform.Template;
 
 namespace Onion.SolutionTransform.Tests
 {
@@ -29,6 +31,29 @@ namespace Onion.SolutionTransform.Tests
             var strat = new Mock<ISolutionTransformStrategy>();
             var self = _transformer.AddStrategy(strat.Object);
             Assert.AreSame(_transformer, self);
+            Assert.AreEqual(1, _transformer.Strategies.Count);
+        }
+
+        [Test]
+        public void AddTemplate_should_add_any_strategies_included_and_return_self()
+        {
+            var self = _transformer.AddTemplate(new TestTemplate());
+            Assert.AreSame(_transformer, self);
+            Assert.AreEqual(2, _transformer.Strategies.Count);
+        }
+    }
+
+    public class TestTemplate : ITemplate
+    {
+        public IEnumerable<ISolutionTransformStrategy> GetStrategies()
+        {
+            var strat1 = new Mock<ISolutionTransformStrategy>().Object;
+            var strat2 = new Mock<ISolutionTransformStrategy>().Object;
+            return new List<ISolutionTransformStrategy>()
+                {
+                    strat1,
+                    strat2
+                };
         }
     }
 }

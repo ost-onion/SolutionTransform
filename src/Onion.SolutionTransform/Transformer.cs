@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Onion.SolutionTransform.Parser;
 using Onion.SolutionTransform.Strategy;
+using Onion.SolutionTransform.Template;
 
 namespace Onion.SolutionTransform
 {
@@ -15,6 +16,15 @@ namespace Onion.SolutionTransform
         public ITransformer AddStrategy(ISolutionTransformStrategy strat)
         {
             Strategies.Enqueue(strat);
+            return this;
+        }
+
+        public ITransformer AddTemplate(ITemplate template)
+        {
+            foreach (var strat in template.GetStrategies())
+            {
+                Strategies.Enqueue(strat);
+            }
             return this;
         }
 
