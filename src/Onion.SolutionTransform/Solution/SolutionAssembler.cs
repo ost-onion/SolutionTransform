@@ -1,10 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using Onion.SolutionTransform.Parser;
 
 namespace Onion.SolutionTransform.Solution
 {
-    public class SolutionAssembler
+    public class SolutionAssembler : ISolutionAssembler
     {
         private readonly IParserInfo _info;
 
@@ -20,6 +21,13 @@ namespace Onion.SolutionTransform.Solution
             ProjectAssembler.Assemble(builder, _info);
             GlobalAssembler.Assemble(builder, _info);
             return builder.ToString();
+        }
+
+        public void Assemble(string slnName, string formatVersion, string visualStudioVersion)
+        {
+            var assembled = GetAssembledSolution(formatVersion, visualStudioVersion);
+            File.WriteAllText(_info.SolutionPath, assembled);
+            File.Move(_info.SolutionPath, _info.BasePath + Path.DirectorySeparatorChar + slnName + ".sln");
         }
 
         private static string GetSolutionHeader(string formatVersion, string visualStudioVersion)
