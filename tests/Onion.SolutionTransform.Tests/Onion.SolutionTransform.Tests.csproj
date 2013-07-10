@@ -133,7 +133,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF EXIST  "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven" RD /S /Q "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven"
-xcopy /e  "$(SolutionDir)fixtures" "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures"</PostBuildEvent>
+IF EXIST  "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\transform" RD /S /Q "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\transform"
+xcopy /e  "$(SolutionDir)fixtures" "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures"
+xcopy /e  "$(SolutionDir)fixtures" "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\transform\"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
