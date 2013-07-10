@@ -1,4 +1,5 @@
 ﻿using System;
+using Onion.SolutionParser.Parser.Model;
 using ParserProject = Onion.SolutionParser.Parser.Model.Project;
 
 namespace Onion.SolutionTransform.Project
@@ -52,6 +53,11 @@ namespace Onion.SolutionTransform.Project
         public bool IsSolutionFolder
         {
             get { return TypeGuid == SolutionFolderType; }
+        }
+
+        public ProjectSection ProjectSection
+        {
+            get { return _solutionProject.ProjectSection; }
         }
 
         public string PreviousName { get; private set; }

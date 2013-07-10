@@ -51,6 +51,7 @@
     <Compile Include="Replacement\IPattern.cs" />
     <Compile Include="Replacement\Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Solution\SolutionAssembler.cs" />
     <Compile Include="Strategy\CSharpStrategy.cs" />
     <Compile Include="Strategy\ISolutionTransformStrategy.cs" />
     <Compile Include="Strategy\PatternBasedStrategy.cs" />
