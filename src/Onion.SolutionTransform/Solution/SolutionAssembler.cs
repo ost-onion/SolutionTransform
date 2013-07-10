@@ -25,9 +25,14 @@ namespace Onion.SolutionTransform.Solution
 
         public void Assemble(string slnName, string formatVersion, string visualStudioVersion)
         {
+            Assemble(formatVersion, visualStudioVersion);
+            File.Move(_info.SolutionPath, _info.BasePath + Path.DirectorySeparatorChar + slnName + ".sln");
+        }
+
+        public void Assemble(string formatVersion, string visualStudioVersion)
+        {
             var assembled = GetAssembledSolution(formatVersion, visualStudioVersion);
             File.WriteAllText(_info.SolutionPath, assembled);
-            File.Move(_info.SolutionPath, _info.BasePath + Path.DirectorySeparatorChar + slnName + ".sln");
         }
 
         private static string GetSolutionHeader(string formatVersion, string visualStudioVersion)

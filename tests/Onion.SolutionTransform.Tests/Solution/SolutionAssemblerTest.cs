@@ -22,6 +22,7 @@ namespace Onion.SolutionTransform.Tests.Solution
             _info = new ParserInfo(path);
             _assembler = new SolutionAssembler(_info);
             var projects = _info.GetProjects();
+            SetUpFiles();
             SetUpProjects(projects);
         }
 
@@ -46,14 +47,6 @@ namespace Onion.SolutionTransform.Tests.Solution
         public void Assemble_should_overwrite_original_solution_file()
         {
             //arrange
-            var original = new FileInfo(TestUtility.GetFixturePath("NDriven.sln"));
-            var copy = original.DirectoryName + Path.DirectorySeparatorChar + "NDrivenCopy.sln";
-            var newSln = original.DirectoryName + Path.DirectorySeparatorChar + "NewSolution.sln";
-            if (File.Exists(copy))
-                File.Delete(copy);
-            if (File.Exists(newSln))
-                File.Delete(newSln);
-            File.Copy(original.FullName, copy);
             var info = new ParserInfo(TestUtility.GetFixturePath("NDrivenCopy.sln"));
             var assembler = new SolutionAssembler(info);
             SetUpProjects(info.GetProjects());
@@ -65,6 +58,34 @@ namespace Onion.SolutionTransform.Tests.Solution
             var fixture = TestUtility.GetFileContents("ExpectedAssembly.sln");
             Assert.True(File.Exists(TestUtility.GetFixturePath("NewSolution.sln")));
             Assert.AreEqual(fixture, TestUtility.GetFileContents("NewSolution.sln"));
+        }
+
+        [Test]
+        public void Assemble_should_overrwrite_contents_if_name_not_given()
+        {
+            //arrange
+            var info = new ParserInfo(TestUtility.GetFixturePath("NDrivenCopy.sln"));
+            var assembler = new SolutionAssembler(info);
+            SetUpProjects(info.GetProjects());
+
+            //act
+            assembler.Assemble(FormatVersion, VisualStudioVersion);
+
+            //assert
+            var fixture = TestUtility.GetFileContents("ExpectedAssembly.sln");
+            Assert.AreEqual(fixture, TestUtility.GetFileContents("NDrivenCopy.sln"));
+        }
+
+        private static void SetUpFiles()
+        {
+            var original = new FileInfo(TestUtility.GetFixturePath("NDriven.sln"));
+            var copy = original.DirectoryName + Path.DirectorySeparatorChar + "NDrivenCopy.sln";
+            var newSln = original.DirectoryName + Path.DirectorySeparatorChar + "NewSolution.sln";
+            if (File.Exists(copy))
+                File.Delete(copy);
+            if (File.Exists(newSln))
+                File.Delete(newSln);
+            File.Copy(original.FullName, copy);
         }
     }
 }
