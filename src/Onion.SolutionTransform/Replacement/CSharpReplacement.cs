@@ -23,10 +23,18 @@ namespace Onion.SolutionTransform.Replacement
         {
             SyntaxTree tree = SyntaxTree.ParseFile(_path);
             var root = tree.GetRoot();
+            root = ReplaceUsingDirectives(root);
+            File.WriteAllText(_path, root.GetText().ToString());
+        }
+
+        private CompilationUnitSyntax ReplaceUsingDirectives(CompilationUnitSyntax root)
+        {
             var oldNodes = new List<UsingDirectiveSyntax>();
             oldNodes.AddRange(root.Usings.Where(u => u.Name.GetText().ToString().StartsWith(_search)));
-            root = root.ReplaceNodes(oldNodes, (n1, n2) => n1.WithName(Syntax.ParseName(n1.Name.GetText().ToString().Replace(_search, _replace))));
-            File.WriteAllText(_path, root.GetText().ToString());
+            root = root.ReplaceNodes(oldNodes,
+                                     (n1, n2) =>
+                                     n1.WithName(Syntax.ParseName(n1.Name.GetText().ToString().Replace(_search, _replace))));
+            return root;
         }
     }
 }
