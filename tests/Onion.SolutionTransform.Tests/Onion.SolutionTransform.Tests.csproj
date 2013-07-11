@@ -65,9 +65,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Fixtures\output\OutputUsingDirectives.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fixtures\source\SourceUsingDirectives.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Compile Include="IO\DirectoryWalkerTest.cs" />
     <Compile Include="Parser\ParserInfoTest.cs" />
     <Compile Include="Project\ProjectDocumentTest.cs" />
+    <Compile Include="Replacement\CSharpReplacementTest.cs" />
     <Compile Include="Replacement\PatternTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solution\SolutionAssemblerTest.cs" />
@@ -129,6 +136,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF EXIST  "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven" RD /S /Q "$(SolutionDir)tests\Onion.SolutionTransform.Tests\bin\Debug\Fixtures\ndriven"

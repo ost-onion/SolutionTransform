@@ -19,5 +19,21 @@ namespace Onion.SolutionTransform.Tests
                 return reader.ReadToEnd();
             }
         }
+
+        public static string CopyFile(string fileName, string newName)
+        {
+            var original = new FileInfo(GetFixturePath(fileName));
+            var directory = original.DirectoryName;
+            var newPath = directory + Path.DirectorySeparatorChar + newName;
+            original.CopyTo(newPath);
+            return newPath;
+        }
+
+        public static void DeleteFile(string fileName)
+        {
+            var path = GetFixturePath(fileName);
+            if (File.Exists(path))
+                File.Delete(path);
+        }
     }
 }
