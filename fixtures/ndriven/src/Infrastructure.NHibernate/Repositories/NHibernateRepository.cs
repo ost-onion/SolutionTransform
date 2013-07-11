@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Linq;
+using Core.Domain.Model;
 
 namespace Infrastructure.NHibernate.Repositories
 {
-    public class NHibernateRepository<T> : Core.Domain.Model.IRepository<T> where T : IEntity<T>
+    public class NHibernateRepository<T> : IRepository<T> where T : IEntity<T>
     {
         protected ISession Session;
 
         public NHibernateRepository(ISession session)
         {
+            var model = (Core.Domain.Model.IEntity) session;
             Session = session;
         }
 

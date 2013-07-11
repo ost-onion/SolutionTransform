@@ -38,7 +38,7 @@ namespace Onion.SolutionTransform.Tests
         [Test]
         public void AddStrategy_should_set_ParserInfo_if_null()
         {
-            var strat = new CSharpStrategy();
+            var strat = new ProjectStrategy();
             _transformer.AddStrategy(strat);
             Assert.AreSame(_transformer.ParserInfo, strat.ParserInfo);
         }
@@ -46,7 +46,7 @@ namespace Onion.SolutionTransform.Tests
         [Test]
         public void AddStrategy_should_not_set_ParserInfo_if_already_set()
         {
-            var strat = new CSharpStrategy();
+            var strat = new ProjectStrategy();
             var info = new Mock<IParserInfo>();
             strat.ParserInfo = info.Object;
 
@@ -60,20 +60,6 @@ namespace Onion.SolutionTransform.Tests
             var self = _transformer.AddTemplate(new TestTemplate());
             Assert.AreSame(_transformer, self);
             Assert.AreEqual(2, _transformer.Strategies.Count);
-        }
-
-        [Test]
-        public void Transform_should_result_in_transformed_solution()
-        {
-            _transformer
-                .AddStrategy(new CSharpStrategy())
-                .AddStrategy(new ProjectStrategy());
-
-            var projects = _transformer.ParserInfo.GetProjects();
-            var clientName = "SuperClient.";
-            projects.Where(p => p.Name != ".nuget").ToList().ForEach(p => p.Name = clientName + p.Name);
-
-            _transformer.Transform();
         }
     }
 
