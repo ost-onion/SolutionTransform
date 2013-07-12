@@ -10,6 +10,7 @@ namespace Onion.SolutionTransform.Tests.Replacement
         public void Setup()
         {
             TestUtility.DeleteFile(@"source\SourceUsingDirectivesCopy.txt");
+            TestUtility.DeleteFile(@"source\SourceNamespaceDeclarationCopy.txt");
         }
 
         [Test]
@@ -22,6 +23,19 @@ namespace Onion.SolutionTransform.Tests.Replacement
             replacement.Replace();
 
             var output = TestUtility.GetFileContents(@"source\SourceUsingDirectivesCopy.txt");
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void Replace_should_replace_text_in_namespace_directive()
+        {
+            var copy = TestUtility.CopyFile(@"source\SourceNamespaceDeclaration.txt", "SourceNamespaceDeclarationCopy.txt");
+            var expected = TestUtility.GetFileContents(@"output\OutputNamespaceDeclaration.txt");
+            var replacement = new CSharpReplacement(copy, "Infrastructure", "Support.Infrastructure");
+
+            replacement.Replace();
+
+            var output = TestUtility.GetFileContents(@"source\SourceNamespaceDeclarationCopy.txt");
             Assert.AreEqual(expected, output);
         }
     }

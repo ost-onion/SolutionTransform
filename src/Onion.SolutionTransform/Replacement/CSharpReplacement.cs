@@ -24,17 +24,25 @@ namespace Onion.SolutionTransform.Replacement
             SyntaxTree tree = SyntaxTree.ParseFile(_path);
             var root = tree.GetRoot();
             root = ReplaceUsingDirectives(root);
+            root = ReplaceNamespaceDeclarations(root);
             File.WriteAllText(_path, root.GetText().ToString());
+        }
+
+        private CompilationUnitSyntax ReplaceNamespaceDeclarations(CompilationUnitSyntax root)
+        {
+            var ns = root.DescendantNodes().Where(n => n.Kind == SyntaxKind.NamespaceDeclaration).Cast<NamespaceDeclarationSyntax>();
+            return root.ReplaceNodes(ns.Where(n => n.Name.ToFullString().StartsWith(_search)),
+                                     (n1, n2) =>
+                                     n1.WithName(Syntax.ParseName(n1.Name.ToFullString().Replace(_search, _replace))));
         }
 
         private CompilationUnitSyntax ReplaceUsingDirectives(CompilationUnitSyntax root)
         {
             var oldNodes = new List<UsingDirectiveSyntax>();
-            oldNodes.AddRange(root.Usings.Where(u => u.Name.GetText().ToString().StartsWith(_search)));
-            root = root.ReplaceNodes(oldNodes,
+            oldNodes.AddRange(root.Usings.Where(u => u.Name.ToFullString().StartsWith(_search)));
+            return root.ReplaceNodes(oldNodes,
                                      (n1, n2) =>
-                                     n1.WithName(Syntax.ParseName(n1.Name.GetText().ToString().Replace(_search, _replace))));
-            return root;
+                                     n1.WithName(Syntax.ParseName(n1.Name.ToFullString().Replace(_search, _replace))));
         }
     }
 }
