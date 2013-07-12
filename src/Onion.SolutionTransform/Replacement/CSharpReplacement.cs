@@ -8,9 +8,9 @@ namespace Onion.SolutionTransform.Replacement
 {
     public class CSharpReplacement
     {
-        private string _path;
-        private string _search;
-        private string _replace;
+        private readonly string _path;
+        private readonly string _search;
+        private readonly string _replace;
 
         public CSharpReplacement(string path, string search, string replace)
         {
@@ -25,21 +25,32 @@ namespace Onion.SolutionTransform.Replacement
             var root = tree.GetRoot();
             root = ReplaceUsingDirectives(root);
             root = ReplaceNamespaceDeclarations(root);
+            root = ReplaceBaseLists(root);
             File.WriteAllText(_path, root.GetText().ToString());
+        }
+
+        private CompilationUnitSyntax ReplaceBaseLists(CompilationUnitSyntax root)
+        {
+            var bases = root.DescendantNodes().OfType<BaseListSyntax>();
+            var nodes = new List<QualifiedNameSyntax>();
+            foreach (var t in bases.Select(b => b.Types).SelectMany(types => types))
+                nodes.AddRange(t.DescendantNodes().OfType<QualifiedNameSyntax>().Where(q => q.Left.ToFullString().StartsWith(_search)));
+            return root.ReplaceNodes(nodes,
+                                     (n1, n2) =>
+                                     n1.WithLeft(Syntax.ParseName(n1.Left.ToFullString().Replace(_search, _replace))));
         }
 
         private CompilationUnitSyntax ReplaceNamespaceDeclarations(CompilationUnitSyntax root)
         {
-            var ns = root.DescendantNodes().Where(n => n.Kind == SyntaxKind.NamespaceDeclaration).Cast<NamespaceDeclarationSyntax>();
-            return root.ReplaceNodes(ns.Where(n => n.Name.ToFullString().StartsWith(_search)),
+            var oldNodes = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().Where(n => n.Name.ToFullString().StartsWith(_search));
+            return root.ReplaceNodes(oldNodes,
                                      (n1, n2) =>
                                      n1.WithName(Syntax.ParseName(n1.Name.ToFullString().Replace(_search, _replace))));
         }
 
         private CompilationUnitSyntax ReplaceUsingDirectives(CompilationUnitSyntax root)
         {
-            var oldNodes = new List<UsingDirectiveSyntax>();
-            oldNodes.AddRange(root.Usings.Where(u => u.Name.ToFullString().StartsWith(_search)));
+            var oldNodes = root.Usings.Where(u => u.Name.ToFullString().StartsWith(_search));
             return root.ReplaceNodes(oldNodes,
                                      (n1, n2) =>
                                      n1.WithName(Syntax.ParseName(n1.Name.ToFullString().Replace(_search, _replace))));

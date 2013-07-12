@@ -11,6 +11,7 @@ namespace Onion.SolutionTransform.Tests.Replacement
         {
             TestUtility.DeleteFile(@"source\SourceUsingDirectivesCopy.txt");
             TestUtility.DeleteFile(@"source\SourceNamespaceDeclarationCopy.txt");
+            TestUtility.DeleteFile(@"source\SourceBaseListCopy.txt");
         }
 
         [Test]
@@ -36,6 +37,19 @@ namespace Onion.SolutionTransform.Tests.Replacement
             replacement.Replace();
 
             var output = TestUtility.GetFileContents(@"source\SourceNamespaceDeclarationCopy.txt");
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void Replace_should_replace_text_in_a_BaseList()
+        {
+            var copy = TestUtility.CopyFile(@"source\SourceBaseList.txt", "SourceBaseListCopy.txt");
+            var expected = TestUtility.GetFileContents(@"output\OutputBaseList.txt");
+            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
+
+            replacement.Replace();
+
+            var output = TestUtility.GetFileContents(@"source\SourceBaseListCopy.txt");
             Assert.AreEqual(expected, output);
         }
     }
