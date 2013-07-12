@@ -26,7 +26,16 @@ namespace Onion.SolutionTransform.Replacement
             root = ReplaceUsingDirectives(root);
             root = ReplaceNamespaceDeclarations(root);
             root = ReplaceBaseLists(root);
+            root = ReplaceTypeConstraints(root);
             File.WriteAllText(_path, root.GetText().ToString());
+        }
+
+        private CompilationUnitSyntax ReplaceTypeConstraints(CompilationUnitSyntax root)
+        {
+            var types = root.DescendantNodes().OfType<TypeConstraintSyntax>().Where(tc => tc.Type.ToFullString().StartsWith(_search));
+            return root.ReplaceNodes(types,
+                                     (n1, n2) =>
+                                     n1.WithType(Syntax.ParseTypeName(n1.ToFullString().Replace(_search, _replace))));
         }
 
         private CompilationUnitSyntax ReplaceBaseLists(CompilationUnitSyntax root)

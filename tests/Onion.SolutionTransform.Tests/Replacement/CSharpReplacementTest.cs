@@ -12,6 +12,8 @@ namespace Onion.SolutionTransform.Tests.Replacement
             TestUtility.DeleteFile(@"source\SourceUsingDirectivesCopy.txt");
             TestUtility.DeleteFile(@"source\SourceNamespaceDeclarationCopy.txt");
             TestUtility.DeleteFile(@"source\SourceBaseListCopy.txt");
+            TestUtility.DeleteFile(@"source\SourceTypeConstraintCopy.txt");
+            TestUtility.DeleteFile(@"source\SourceAllCopy.txt");
         }
 
         [Test]
@@ -50,6 +52,32 @@ namespace Onion.SolutionTransform.Tests.Replacement
             replacement.Replace();
 
             var output = TestUtility.GetFileContents(@"source\SourceBaseListCopy.txt");
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void Replace_should_replace_text_in_TypeConstraints()
+        {
+            var copy = TestUtility.CopyFile(@"source\SourceTypeConstraint.txt", "SourceTypeConstraintCopy.txt");
+            var expected = TestUtility.GetFileContents(@"output\OutputTypeConstraint.txt");
+            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
+
+            replacement.Replace();
+
+            var output = TestUtility.GetFileContents(@"source\SourceTypeConstraintCopy.txt");
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void Replace_should_replace_multiple_constructs()
+        {
+            var copy = TestUtility.CopyFile(@"source\SourceAll.txt", "SourceAllCopy.txt");
+            var expected = TestUtility.GetFileContents(@"output\OutputAll.txt");
+            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
+
+            replacement.Replace();
+
+            var output = TestUtility.GetFileContents(@"source\SourceAllCopy.txt");
             Assert.AreEqual(expected, output);
         }
     }
