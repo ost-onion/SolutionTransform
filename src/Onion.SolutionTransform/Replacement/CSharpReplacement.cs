@@ -29,7 +29,19 @@ namespace Onion.SolutionTransform.Replacement
             root = ReplaceTypeConstraints(root);
             root = ReplaceTypeArguments(root);
             root = ReplaceVariableDeclarations(root);
+            root = ReplaceObjectCreationExpressions(root);
             File.WriteAllText(_path, root.GetText().ToString());
+        }
+
+        private CompilationUnitSyntax ReplaceObjectCreationExpressions(CompilationUnitSyntax root)
+        {
+            var expressions =
+                root.DescendantNodes()
+                    .OfType<ObjectCreationExpressionSyntax>()
+                    .Where(oc => oc.Type.ToFullString().StartsWith(_search));
+            return root.ReplaceNodes(expressions,
+                                     (n1, n2) =>
+                                     n1.WithType(Syntax.ParseTypeName(n1.Type.ToFullString().Replace(_search, _replace))));
         }
 
         private CompilationUnitSyntax ReplaceVariableDeclarations(CompilationUnitSyntax root)
