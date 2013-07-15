@@ -16,6 +16,7 @@ namespace Onion.SolutionTransform.Tests.Replacement
             TestUtility.DeleteFile(@"source\SourceTypeConstraintCopy.txt");
             TestUtility.DeleteFile(@"source\SourceAllCopy.txt");
             TestUtility.DeleteFile(@"source\SourceTypeArgumentsCopy.txt");
+            TestUtility.DeleteFile(@"source\SourceVariableDeclarationCopy.txt");
         }
 
         [Test]
@@ -46,6 +47,12 @@ namespace Onion.SolutionTransform.Tests.Replacement
         public void Replace_should_replace_text_in_TypeArguments()
         {
             AssertReplacement(@"source\SourceTypeArguments.txt", "Core", "AppleCore");
+        }
+
+        [Test]
+        public void Replace_should_replace_text_in_VariableDeclarations()
+        {
+            AssertReplacement(@"source\SourceVariableDeclaration.txt", "Core", "AppleCore");
         }
 
         [Test]
