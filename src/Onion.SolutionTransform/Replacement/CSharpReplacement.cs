@@ -55,12 +55,14 @@ namespace Onion.SolutionTransform.Replacement
         private CompilationUnitSyntax ReplaceBaseLists(CompilationUnitSyntax root)
         {
             var bases = root.DescendantNodes().OfType<BaseListSyntax>();
-            var nodes = new List<QualifiedNameSyntax>();
-            foreach (var t in bases.Select(b => b.Types).SelectMany(types => types))
-                nodes.AddRange(t.DescendantNodes().OfType<QualifiedNameSyntax>().Where(q => q.Left.ToFullString().StartsWith(_search)));
-            return root.ReplaceNodes(nodes,
-                                     (n1, n2) =>
-                                     n1.WithLeft(Syntax.ParseName(n1.Left.ToFullString().Replace(_search, _replace))));
+            var replaceDict = new Dictionary<BaseListSyntax, SeparatedSyntaxList<TypeSyntax>>();
+            foreach (var b in bases)
+            {
+                var list = Syntax.SeparatedList<TypeSyntax>();
+                list = b.Types.Select(a => Syntax.ParseTypeName(a.ToFullString().Replace(_search, _replace))).Aggregate(list, (current, syntax) => current.Add(syntax));
+                replaceDict.Add(b, list);
+            }
+            return root.ReplaceNodes(replaceDict.Keys.ToList(), (n1, n2) => n1.WithTypes(replaceDict[n1]));
         }
 
         private CompilationUnitSyntax ReplaceNamespaceDeclarations(CompilationUnitSyntax root)

@@ -6,7 +6,7 @@ using NHibernate.Linq;
 
 namespace Infrastructure.NHibernate.Repositories
 {
-    public class NHibernateRepository<T> : Core.Domain.Model.IRepository<T>, Core.Domain.Model.GnarlyRepo where T : IEntity<T>
+    public class NHibernateRepository<T> : Core.Domain.Model.IRepository<T>,Core.Domain.Model.GnarlyRepo where T : IEntity<T>
     {
         protected ISession Session;
 
