@@ -27,7 +27,21 @@ namespace Onion.SolutionTransform.Replacement
             root = ReplaceNamespaceDeclarations(root);
             root = ReplaceBaseLists(root);
             root = ReplaceTypeConstraints(root);
+            root = ReplaceTypeArguments(root);
             File.WriteAllText(_path, root.GetText().ToString());
+        }
+
+        private CompilationUnitSyntax ReplaceTypeArguments(CompilationUnitSyntax root)
+        {
+            var typeArgs = root.DescendantNodes().OfType<TypeArgumentListSyntax>().Where(t => t.Arguments.Any(a => a.ToFullString().StartsWith("Core")));
+            var replaceDict = new Dictionary<TypeArgumentListSyntax, SeparatedSyntaxList<TypeSyntax>>();
+            foreach (var arg in typeArgs)
+            {
+                var list = Syntax.SeparatedList<TypeSyntax>();
+                list = arg.Arguments.Select(a => Syntax.ParseTypeName(a.ToFullString().Replace(_search, _replace))).Aggregate(list, (current, syntax) => current.Add(syntax));
+                replaceDict.Add(arg, list);
+            }
+            return root.ReplaceNodes(replaceDict.Keys.ToList(), (n1, n2) => n1.WithArguments(replaceDict[n1]));
         }
 
         private CompilationUnitSyntax ReplaceTypeConstraints(CompilationUnitSyntax root)

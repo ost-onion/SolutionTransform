@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using Onion.SolutionTransform.Replacement;
 
 namespace Onion.SolutionTransform.Tests.Replacement
@@ -14,70 +15,60 @@ namespace Onion.SolutionTransform.Tests.Replacement
             TestUtility.DeleteFile(@"source\SourceBaseListCopy.txt");
             TestUtility.DeleteFile(@"source\SourceTypeConstraintCopy.txt");
             TestUtility.DeleteFile(@"source\SourceAllCopy.txt");
+            TestUtility.DeleteFile(@"source\SourceTypeArgumentsCopy.txt");
         }
 
         [Test]
         public void Replace_should_replace_text_in_using_directives()
         {
-            var copy = TestUtility.CopyFile(@"source\SourceUsingDirectives.txt", "SourceUsingDirectivesCopy.txt");
-            var expected = TestUtility.GetFileContents(@"output\OutputUsingDirectives.txt");
-            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
-
-            replacement.Replace();
-
-            var output = TestUtility.GetFileContents(@"source\SourceUsingDirectivesCopy.txt");
-            Assert.AreEqual(expected, output);
+            AssertReplacement(@"source\SourceUsingDirectives.txt", "Core", "AppleCore");
         }
 
         [Test]
         public void Replace_should_replace_text_in_namespace_directive()
         {
-            var copy = TestUtility.CopyFile(@"source\SourceNamespaceDeclaration.txt", "SourceNamespaceDeclarationCopy.txt");
-            var expected = TestUtility.GetFileContents(@"output\OutputNamespaceDeclaration.txt");
-            var replacement = new CSharpReplacement(copy, "Infrastructure", "Support.Infrastructure");
-
-            replacement.Replace();
-
-            var output = TestUtility.GetFileContents(@"source\SourceNamespaceDeclarationCopy.txt");
-            Assert.AreEqual(expected, output);
+            AssertReplacement(@"source\SourceNamespaceDeclaration.txt", "Infrastructure", "Support.Infrastructure");
         }
 
         [Test]
         public void Replace_should_replace_text_in_a_BaseList()
         {
-            var copy = TestUtility.CopyFile(@"source\SourceBaseList.txt", "SourceBaseListCopy.txt");
-            var expected = TestUtility.GetFileContents(@"output\OutputBaseList.txt");
-            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
-
-            replacement.Replace();
-
-            var output = TestUtility.GetFileContents(@"source\SourceBaseListCopy.txt");
-            Assert.AreEqual(expected, output);
+            AssertReplacement(@"source\SourceBaseList.txt", "Core", "AppleCore");
         }
 
         [Test]
         public void Replace_should_replace_text_in_TypeConstraints()
         {
-            var copy = TestUtility.CopyFile(@"source\SourceTypeConstraint.txt", "SourceTypeConstraintCopy.txt");
-            var expected = TestUtility.GetFileContents(@"output\OutputTypeConstraint.txt");
-            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
+            AssertReplacement(@"source\SourceTypeConstraint.txt", "Core", "AppleCore");
+        }
 
-            replacement.Replace();
-
-            var output = TestUtility.GetFileContents(@"source\SourceTypeConstraintCopy.txt");
-            Assert.AreEqual(expected, output);
+        [Test]
+        public void Replace_should_replace_text_in_TypeArguments()
+        {
+            AssertReplacement(@"source\SourceTypeArguments.txt", "Core", "AppleCore");
         }
 
         [Test]
         public void Replace_should_replace_multiple_constructs()
         {
-            var copy = TestUtility.CopyFile(@"source\SourceAll.txt", "SourceAllCopy.txt");
-            var expected = TestUtility.GetFileContents(@"output\OutputAll.txt");
-            var replacement = new CSharpReplacement(copy, "Core", "AppleCore");
+            AssertReplacement(@"source\SourceAll.txt", "Core", "AppleCore");
+        }
+
+        public static void AssertReplacement(string source, string search, string replace)
+        {
+            var info = new FileInfo(TestUtility.GetFixturePath(source));
+            var copyName = info.Name.Replace(info.Extension, "") + "Copy" + info.Extension;
+            var outputName = source.Replace("source", "output");
+            outputName = outputName.Replace(info.Extension, "");
+            outputName = outputName.Replace("Source", "Output") +info.Extension;
+
+            var copy = TestUtility.CopyFile(source, copyName);
+            var expected = TestUtility.GetFileContents(outputName);
+            var replacement = new CSharpReplacement(copy, search, replace);
 
             replacement.Replace();
 
-            var output = TestUtility.GetFileContents(@"source\SourceAllCopy.txt");
+            var output = TestUtility.GetFileContents(@"source\" + copyName);
             Assert.AreEqual(expected, output);
         }
     }
